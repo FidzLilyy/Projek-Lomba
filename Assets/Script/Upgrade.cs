@@ -45,6 +45,8 @@ public class Upgrade : MonoBehaviour
             
             else if(CompareTag("Panggung")){
                 UpgradePanggung();
+            }else if(CompareTag("Tempat")){
+                UpgradeTempat();
             }
 
         panel.SetActive(false);
@@ -70,6 +72,10 @@ public class Upgrade : MonoBehaviour
             print("Panggung upgraded");
             sudahUpgrade = false;
         }
+    }
+
+    void UpgradeTempat(){
+        transform.localScale += new Vector3(1F, 1f, 1f);
     }
 
 
