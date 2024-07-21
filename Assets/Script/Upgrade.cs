@@ -7,10 +7,10 @@ public class Upgrade : MonoBehaviour
     public int needUang;
     bool siapUpgrade = false, sudahUpgrade;
 
-    public GameObject upgradeIcon, kursi;
+    public GameObject upgradeIcon;
     public GameObject menuUpgrade, panel;
 
-    public Sprite upgradePanggung;
+    public Sprite upgradePanggung, upgradeKarpet;
 
     void Update()
     {
@@ -39,8 +39,8 @@ public class Upgrade : MonoBehaviour
         Uang.uang = Uang.uang - needUang;
         Debug.Log("Tag saat ini: " + gameObject.tag);
 
-        if(CompareTag("Kursi")){
-                UpgradeKursi();
+        if(CompareTag("Carpet")){
+                UpgradeKarpet();
             }
             
             else if(CompareTag("Panggung")){
@@ -51,16 +51,24 @@ public class Upgrade : MonoBehaviour
 
         panel.SetActive(false);
         menuUpgrade.SetActive(false);
-        needUang = needUang + 5000;
+        needUang = needUang + 999999999;
         sudahUpgrade = true;
     }
 
-    void UpgradeKursi()
+    void UpgradeKarpet()
     {
-        transform.position += new Vector3(-1f, 0, 0);
-        Vector3 posisiObjek = transform.position + new Vector3(1.8f, 0f, 0f);
-        Instantiate(kursi, posisiObjek, Quaternion.identity);
-        sudahUpgrade = false;
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.sprite = upgradeKarpet;
+            print("Karpet upgraded");
+            sudahUpgrade = false;
+        }
+
+        // transform.position += new Vector3(-1f, 0, 0);
+        // Vector3 posisiObjek = transform.position + new Vector3(1.8f, 0f, 0f);
+        // Instantiate(kursi, posisiObjek, Quaternion.identity);
+        // sudahUpgrade = false;
     }
 
     void UpgradePanggung()
