@@ -12,7 +12,7 @@ public class Battle : MonoBehaviour
 
     public Button button;
 
-    public string[] animation;
+    public string animation, animation1;
     public TextMeshProUGUI scoreText;
     public float timeLimit;
     public int score, currentArray = 0;
@@ -23,10 +23,9 @@ public class Battle : MonoBehaviour
 
     void Start()
     {
-        animator.Play(animation[currentArray]);
+        animator.Play(animation);
         buttonRect = button.GetComponent<RectTransform>();
         //RandomizeButtonPosition();
-        button.onClick.AddListener(OnButtonClick);
         button.gameObject.SetActive(false);
     }
 
@@ -34,7 +33,7 @@ public class Battle : MonoBehaviour
     void Update()
     {
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if (stateInfo.normalizedTime >= 1.0f /*|| Input.anyKeyDown*/){
+        if (stateInfo.IsName("BattleAnimation") && stateInfo.normalizedTime >= 1.0f /*|| Input.anyKeyDown*/){
             Time.timeScale = 0.1f;
             panel.SetActive(true);
             battle = true;
@@ -48,10 +47,6 @@ public class Battle : MonoBehaviour
                 TombolAcak();
             }
         }
-
-        if(currentArray >= animation.Length){
-            panel.SetActive(true);
-        }
     }
 
     void TombolAcak(){
@@ -61,26 +56,32 @@ public class Battle : MonoBehaviour
         float y = Random.Range(-canvasRect.rect.height / 2 + buttonRect.rect.height / 2,
                                 canvasRect.rect.height / 2 - buttonRect.rect.height / 2);
 
-        // Mengatur posisi acak
         buttonRect.anchoredPosition = new Vector2(x, y);
     }
 
-    void OnButtonClick()
+    public void ButtonKlik()
     {
-        if (timer <= timeLimit)
-        {
-            score += 1;
-            scoreText.text = "Score =" + score;
-            Debug.Log("Button clicked!");
-            currentArray++;
-            button.gameObject.SetActive(false);
-            battle = false;
-            panel.SetActive(false);
-            Time.timeScale = 1f;
-        }
-        animator.Play(animation[currentArray]);
+        score += 2;
+        scoreText.text = "Score =" + score;
+        Debug.Log("Button clicked!");
+        // timer += Time.deltaTime;
+        // if (timer <= timeLimit)
+        // {
+        //     score += 2;
+        //     scoreText.text = "Score =" + score;
+        //     Debug.Log("Button clicked!");
+            
+        // }else /*if(timer >= timeLimit)*/{
+        //     score += 1;
+        // }
 
-        timer = 0;
-        TombolAcak();
+        button.gameObject.SetActive(false);
+        battle = false;
+        panel.SetActive(false);
+        Time.timeScale = 1f;
+
+        animator.Play(animation1);
+
+        //timer = 0;
     }
 }
