@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &119278724
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1015,7 +1015,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 1941298277}
   panel: {fileID: 226501895}
-  panel1: {fileID: 0}
+  panel1: {fileID: 119278723}
   menuBeres: {fileID: 1957142275}
   button: {fileID: 1760158535}
   animation: BattleAnimation
@@ -1027,6 +1027,7 @@ MonoBehaviour:
   score: 0
   jmlKlik: 0
   totalUang: 0
+  rules: 0
 --- !u!1 &865732446
 GameObject:
   m_ObjectHideFlags: 0
