@@ -5,12 +5,12 @@ using UnityEngine;
 public class Upgrade : MonoBehaviour
 {
     public int needUang;
-    bool siapUpgrade = false, sudahUpgrade;
+    bool siapUpgrade = false;
 
     public GameObject upgradeIcon;
     public GameObject menuUpgrade, panel;
 
-    public Sprite upgradePanggung, upgradeKarpet;
+    Sprite upgradeMusic, upgradePanggung, upgradeKarpet;
 
     void Update()
     {
@@ -39,20 +39,19 @@ public class Upgrade : MonoBehaviour
         Uang.uang = Uang.uang - needUang;
         Debug.Log("Tag saat ini: " + gameObject.tag);
 
-        if(CompareTag("Carpet")){
+        if(CompareTag("Karpet")){
                 UpgradeKarpet();
             }
             
             else if(CompareTag("Panggung")){
                 UpgradePanggung();
-            }else if(CompareTag("Tempat")){
-                UpgradeTempat();
+            }else if(CompareTag("Music")){
+                UpgradeMusic();
             }
 
         panel.SetActive(false);
         menuUpgrade.SetActive(false);
         needUang = needUang + 999999999;
-        sudahUpgrade = true;
     }
 
     void UpgradeKarpet()
@@ -60,15 +59,12 @@ public class Upgrade : MonoBehaviour
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null)
         {
+            upgradeKarpet = Resources.Load<Sprite>("Karpet/karpet_upgrade");
             spriteRenderer.sprite = upgradeKarpet;
             print("Karpet upgraded");
-            sudahUpgrade = false;
+        }else{
+            print("Karpet Tidak Di Temukan");
         }
-
-        // transform.position += new Vector3(-1f, 0, 0);
-        // Vector3 posisiObjek = transform.position + new Vector3(1.8f, 0f, 0f);
-        // Instantiate(kursi, posisiObjek, Quaternion.identity);
-        // sudahUpgrade = false;
     }
 
     void UpgradePanggung()
@@ -76,14 +72,24 @@ public class Upgrade : MonoBehaviour
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null)
         {
+            upgradePanggung = Resources.Load<Sprite>("Panggung/panggung_upgrade");
             spriteRenderer.sprite = upgradePanggung;
             print("Panggung upgraded");
-            sudahUpgrade = false;
+        }else{
+            print("Panggung Tidak Di Temukan");
         }
     }
 
-    void UpgradeTempat(){
-        transform.localScale += new Vector3(1F, 1f, 1f);
+    void UpgradeMusic(){
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            upgradeMusic = Resources.Load<Sprite>("Music/musik_upgrade");
+            spriteRenderer.sprite = upgradeMusic;
+            print("Music upgraded");
+        }else{
+            print("Music Tidak Di Temukan");
+        }
     }
 
 
