@@ -3,54 +3,58 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Battle : MonoBehaviour
 {
     public Animator animator;
     
-    public GameObject panel;
+    public GameObject panel, panel1, menuBeres;
 
     public Button button;
 
-    public string[] animation;
-    public TextMeshProUGUI scoreText;
-    public float timeLimit;
-    public int score, currentArray = 0;
-    public bool battle;
+    public string animation, animation1;
+    public string scene;
+    public TextMeshProUGUI scoreText, scoreText1, dapatUang;
+    public int score, jmlKlik, totalUang;
+    public bool rules = false;
 
     private RectTransform buttonRect;
-    private float timer;
 
     void Start()
     {
-        animator.Play(animation[currentArray]);
+        animator.Play(animation);
         buttonRect = button.GetComponent<RectTransform>();
-        //RandomizeButtonPosition();
-        button.onClick.AddListener(OnButtonClick);
         button.gameObject.SetActive(false);
+        panel1.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if (stateInfo.normalizedTime >= 1.0f /*|| Input.anyKeyDown*/){
-            Time.timeScale = 0.1f;
-            panel.SetActive(true);
-            battle = true;
-            button.gameObject.SetActive(true);
+        if(Input.GetKeyDown(KeyCode.Space)){
+            panel1.SetActive(false);
+            rules = true;
         }
-
-        if(battle){
-            timer += Time.deltaTime;
-            if(timer >= timeLimit){
-                timer = 0;
-                TombolAcak();
+        if(rules){
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (stateInfo.IsName("BattleAnimation") && stateInfo.normalizedTime >= 5.0f || Input.GetKeyDown(KeyCode.Return)){
+                Time.timeScale = 0.1f;
+                panel.SetActive(true);
+                button.gameObject.SetActive(true);
             }
-        }
 
-        if(currentArray >= animation.Length){
-            panel.SetActive(true);
+            if (stateInfo.IsName("Battle1") && stateInfo.normalizedTime >= 3.0f /*|| Input.anyKeyDown*/){
+                Time.timeScale = 0.1f;
+                scoreText1.text = "Score = " + score;
+                totalUang = 1500 * score;
+                dapatUang.text = "Dapat Uang = " + totalUang;
+                panel.SetActive(true);
+                menuBeres.SetActive(true);
+                //button.gameObject.SetActive(true);
+
+                jmlKlik = 0;
+            }
         }
     }
 
@@ -61,26 +65,30 @@ public class Battle : MonoBehaviour
         float y = Random.Range(-canvasRect.rect.height / 2 + buttonRect.rect.height / 2,
                                 canvasRect.rect.height / 2 - buttonRect.rect.height / 2);
 
-        // Mengatur posisi acak
-        buttonRect.anchoredPosition = new Vector2(x, y);
+        buttonRect.anchoredPosition = new Vector3(x, y, 0);
     }
 
-    void OnButtonClick()
+    public void ButtonKlik()
     {
-        if (timer <= timeLimit)
-        {
-            score += 1;
-            scoreText.text = "Score =" + score;
-            Debug.Log("Button clicked!");
-            currentArray++;
+        jmlKlik = jmlKlik + 1;
+        score += 2;
+        scoreText.text = "Score = " + score;
+        Debug.Log(jmlKlik);
+        if(jmlKlik < 5){
+            TombolAcak();
+        }else{
             button.gameObject.SetActive(false);
-            battle = false;
             panel.SetActive(false);
             Time.timeScale = 1f;
+            animator.Play(animation1);
         }
-        animator.Play(animation[currentArray]);
+    }
 
-        timer = 0;
-        TombolAcak();
+    public void Next(){
+        Uang.uang = Uang.uang + totalUang;
+        score = 0;
+        totalUang = 0;
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(scene);
     }
 }
